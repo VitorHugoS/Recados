@@ -1,0 +1,208 @@
+{% include 'headeradm.html'  %}
+<div id="page_content">
+        <div id="page_content_inner">
+
+            <h3 class="heading_b uk-margin-bottom">Usuários</h3>
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <label for="contact_list_search">Procurar</label>
+                            <input class="md-input" type="text" id="contact_list_search"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-grid-width-xlarge-1-5 hierarchical_show" id="contact_list">
+            {% for item in usuarios %}
+            <div data-uk-filter="{{item.usuario}}, {{item.usuario}}">
+                    <div class="md-card md-card-hover">
+                        <div class="md-card-head">
+                            <div class="md-card-head-menu" data-uk-dropdown="{pos:'bottom-right'}">
+                                <i class="md-icon material-icons">&#xE5D4;</i>
+                                <div class="uk-dropdown uk-dropdown-small">
+                                    <ul class="uk-nav">
+                                        <li><a href="#" onclick="editar('{{item.id}}')">Editar</a></li>
+                                        <li><a href="#" onclick="excluir('{{item.id}}')">Remover</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="uk-text-center">
+                                <img class="md-card-head-avatar" src="{{baseUrl}}{{Css}}assets/img/avatars/avatar_02.png" alt=""/>
+                            </div>
+                            <h3 class="md-card-head-text uk-text-center">
+                                {{item.usuario}}                  
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                             <ul class="md-list">
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Email</span>
+                                        <span class="uk-text-small uk-text-muted uk-text-truncate">{{item.emailuser}}</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Tipo</span>
+                                        <span class="uk-text-small uk-text-muted uk-text-truncate">
+                                        {% if item.tipo == 2 %}
+                                        Usuário
+                                        {% else %}
+                                        Administrador
+                                        {% endif %}
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        <div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent" href="#novo_usuario" data-uk-modal="{ center:true }">
+            <i class="material-icons">&#xE145;</i>
+        </a>
+        </div>
+        <div class="uk-modal" id="novo_usuario">
+        <div class="uk-modal-dialog">
+            <form id="add" class="uk-form-stacked">
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_title">Usuário</label>
+                    <input type="text" class="md-input" id="Task_title" name="snippet_title"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_senha">Senha</label>
+                    <input type="password" class="md-input" id="task_senha" name="task_senha"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Email</label>
+                    <input type="text" class="md-input" id="task_email" name="task_email"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_assignee" class="uk-form-label">Tipo</label>
+                    <select class="uk-form-width-medium" name="task_assignee" id="task_assignee" data-md-selectize-inline>
+                        <option value="1">Administrador</option>
+                        <option value="2">Usuário</option>
+                    </select>
+                </div>
+
+                <div class="uk-modal-footer uk-text-right">
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Fechar</button><button type="submit" class="md-btn md-btn-flat md-btn-flat-primary" id="snippet_new_save">Adicionar Usuário</button>
+                </div>
+            </form>
+        </div>
+        </div>
+        <div class="uk-modal" id="edit">
+        <div class="uk-modal-dialog">
+            <form id="envio" class="uk-form-stacked">
+                <input type="hidden" name="ide" />
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_title">Usuário</label>
+                    <input type="text" class="md-input" id="Task_title" name="edituser" value="1" />
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_senha">Senha</label>
+                    <input type="password" class="md-input" id="task_senha" name="editsenha"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Email</label>
+                    <input type="text" class="md-input" id="task_email" name="editemail" value="1"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_assignee" class="uk-form-label">Tipo</label>
+                    <select class="uk-form-width-medium" name="editop" id="task_assignee" data-md-selectize-inline>
+                        <option value="1">Administrador</option>
+                        <option value="2">Usuário</option>
+                    </select>
+                </div>
+
+                <div class="uk-modal-footer uk-text-right">
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Fechar</button><button type="submit" class="md-btn md-btn-flat md-btn-flat-primary" id="snippet_new_save">Atualizar Usuário</button>
+                </div>
+            </form>
+        </div>
+        </div>
+     <script type="text/javascript">
+     $("#envio").submit(function(e){
+        e.preventDefault();
+        var usuario = $("input[name=edituser]").val();
+        var senha = $("input[name=editsenha]").val();
+        var email = $("input[name=editemail]").val();
+        var tipo = $("select[name=editop]").val();
+        var id = $("input[name=ide]").val();
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/attUser.php",
+                data:{user: usuario, pass: senha, tipo: tipo, email: email, id: id},
+                success: function(data){
+                    if(data>0){
+                    location.reload(); 
+                    }else{
+                    alert("Erro ao atualizar!");
+                    }
+                }       
+        });
+    });
+    $("#add").submit(function(e){
+        e.preventDefault();
+        var usuario = $("input[name=snippet_title]").val();
+        var senha = $("input[name=task_senha]").val();
+        var email = $("input[name=task_email]").val();
+        var tipo = $("select[name=task_assignee]").val();
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/addUser.php",
+                data:{user: usuario, pass: senha, tipo: tipo, email: email},
+                success: function(data){
+                    if(data>0){
+                    location.reload(); 
+                    }else{
+                    alert("Erro ao cadastrar!");
+                    }
+                }       
+        });
+    });
+    function excluir(id){
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/delUser.php",
+                data:{id: id},
+                success: function(data){
+                    if(data>0){
+                    location.reload(); 
+                    }else{
+                    alert("Erro ao cadastrar!");
+                    }
+                }       
+        });
+    }
+    function editar(id){
+        var modal = UIkit.modal("#edit");
+        if ( modal.isActive() ) {
+            modal.hide();
+        } else {
+            modal.show();
+        }
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/editUser.php",
+                data:{id: id},
+                success: function(data){
+                    var jsonData = JSON.parse(data);
+                    $("input[name=editemail]").val(jsonData[0].emailuser);
+                    $("#task_email").addClass("md-input-filled");
+                    $("input[name=ide]").val(jsonData[0].id);
+                    
+                    //$("select[name=editop]").val(jsonData[0].tipo);
+                    $("input[name=edituser]").val(jsonData[0].usuario);
+                    $("#Task_title").addClass("md-input-filled");
+                }       
+        });
+    }
+    </script>
+    {% include 'footer.html'  %}
+     <!--  contact list functions -->
+    <script src="{{baseUrl}}{{Css}}assets/js/pages/page_contact_list.min.js"></script>

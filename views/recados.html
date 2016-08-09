@@ -1,0 +1,310 @@
+{% include 'headeradm.html'  %}
+<style type="text/css">
+    .selectize-dropdown{
+        z-index: 9999;
+    }
+</style>
+<div id="page_content">
+        <div id="page_heading" data-uk-sticky="{ top: 48, media: 960 }">
+            <h1>Recados</h1>
+        </div>
+        <div id="page_content_inner">
+            <div class="md-card">
+                <h3 class="uk-text-center">Recados Recebidos</h3>
+                <div class="md-card-content">
+                    <div class="uk-overflow-container uk-margin-bottom">
+                        <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair" id="ts_issues">
+                            <thead>
+                                <tr>
+                                    <th class="uk-text-center">Código</th>
+                                    <th>Empresa</th>
+                                    <th>Título</th>
+                                    <th>Prioridade</th>
+                                    <th>Criado</th>
+                                    <th>Status</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th class="uk-text-center">Código</th>
+                                    <th>Empresa</th>
+                                    <th>Título</th>
+                                    <th>Prioridade</th>
+                                    <th>Criado</th>
+                                    <th>Status</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                {% for item in dados %}
+                                <tr>
+                                    <td class="uk-text-center"><span class="uk-text-small uk-text-muted uk-text-nowrap">{{item.hash}}</span></td>
+                                    <td>
+                                        {{item.empresa}}
+                                    </td>
+                                    <td>{{item.titulo}}</td>
+                                    <td>
+                                    {% if(item.tipo == 1) %}
+                                    <span class="uk-badge uk-badge-warning">
+                                    Normal
+                                    {% else %}
+                                    <span class="uk-badge uk-badge-danger">
+                                    Urgente
+                                    {% endif %}</span></td>
+                                    <td class="uk-text-small">{{item.hora}}</td>
+                                    <td class="uk-text-small">
+                                    {% if(item.concluido == 1) %}
+                                    <span class="uk-badge uk-badge-success">
+                                    Finalizado
+                                    {% else %}
+                                    <span class="uk-badge uk-badge-info">
+                                    Em espera
+                                    {% endif %}</td>
+                                    <td><a href="#recado" onclick="abrir('{{item.hash}}')" data-uk-modal="{ center:true }"><span class="uk-badge uk-badge-outline uk-text-upper"><i class="material-icons uk-text-primary">&#xE8F4;</i></span></a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="uk-pagination ts_pager">
+                        <li data-uk-tooltip title="Select Page">
+                            <select class="ts_gotoPage ts_selectize"></select>
+                        </li>
+                        <li class="first"><a href="javascript:void(0)"><i class="uk-icon-angle-double-left"></i></a></li>
+                        <li class="prev"><a href="javascript:void(0)"><i class="uk-icon-angle-left"></i></a></li>
+                        <li><span class="pagedisplay"></span></li>
+                        <li class="next"><a href="javascript:void(0)"><i class="uk-icon-angle-right"></i></a></li>
+                        <li class="last"><a href="javascript:void(0)"><i class="uk-icon-angle-double-right"></i></a></li>
+                        <li data-uk-tooltip title="Page Size">
+                            <select class="pagesize ts_selectize">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="md-card">
+                 <h3 class="uk-text-center">Recados Enviados</h3>
+                <div class="md-card-content">
+                    <div class="uk-overflow-container uk-margin-bottom">
+                        <table class="uk-table uk-table-align-vertical uk-table-nowrap tablesorter tablesorter-altair" id="ts_issues">
+                            <thead>
+                                <tr>
+                                    <th class="uk-text-center">Código</th>
+                                    <th>Empresa</th>
+                                    <th>Título</th>
+                                    <th>Prioridade</th>
+                                    <th>Finalizado</th>
+                                    <th>Status</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th class="uk-text-center">Código</th>
+                                    <th>Empresa</th>
+                                    <th>Título</th>
+                                    <th>Prioridade</th>
+                                    <th>Finalizado</th>
+                                    <th>Status</th>
+                                    <th>Ver</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                {% for item in enviados %}
+                                <tr>
+                                    <td class="uk-text-center"><span class="uk-text-small uk-text-muted uk-text-nowrap">{{item.hash}}</span></td>
+                                    <td>
+                                        {{item.empresa}}
+                                    </td>
+                                    <td>{{item.titulo}}</td>
+                                    <td>
+                                    {% if(item.tipo == 1) %}
+                                    <span class="uk-badge uk-badge-warning">
+                                    Normal
+                                    {% else %}
+                                    <span class="uk-badge uk-badge-danger">
+                                    Urgente
+                                    {% endif %}</span></td>
+                                    <td class="uk-text-small">{{item.visto}}</td>
+                                    <td class="uk-text-small">
+                                    {% if(item.concluido == 1) %}
+                                    <span class="uk-badge uk-badge-success">
+                                    Finalizado
+                                    {% else %}
+                                    <span class="uk-badge uk-badge-info">
+                                    Em espera
+                                    {% endif %}</td>
+                                    <td><a href="#recado" onclick="abrir1('{{item.hash}}')" data-uk-modal="{ center:true }"><span class="uk-badge uk-badge-outline uk-text-upper"><i class="material-icons uk-text-primary">&#xE8F4;</i></span></a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul class="uk-pagination ts_pager">
+                        <li data-uk-tooltip title="Select Page">
+                            <select class="ts_gotoPage ts_selectize"></select>
+                        </li>
+                        <li class="first"><a href="javascript:void(0)"><i class="uk-icon-angle-double-left"></i></a></li>
+                        <li class="prev"><a href="javascript:void(0)"><i class="uk-icon-angle-left"></i></a></li>
+                        <li><span class="pagedisplay"></span></li>
+                        <li class="next"><a href="javascript:void(0)"><i class="uk-icon-angle-right"></i></a></li>
+                        <li class="last"><a href="javascript:void(0)"><i class="uk-icon-angle-double-right"></i></a></li>
+                        <li data-uk-tooltip title="Page Size">
+                            <select class="pagesize ts_selectize">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent" href="#novo_cliente" data-uk-modal="{ center:true }">
+            <i class="material-icons">&#xE145;</i>
+        </a>
+        </div>
+        <div class="uk-modal" id="novo_cliente">
+        <div class="uk-modal-dialog uk-modal-dialog-large">
+            <form class="uk-form-stacked">
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Usuário</label>
+                    <select id="usuarios" name="usuarios" data-md-selectize>
+                        <option value="0">Selecione</option>
+                        {% for item in usuarios %}
+                             <option value="{{item.id}}">{{item.usuario}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Empresa</label>
+                    <select id="empresas" name="empresas" data-md-selectize>
+                        <option value="0">Selecione</option>
+                        {% for item in empresa %}
+                             <option value="{{item.id}}">{{item.empresa}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Prioridade</label>
+                    <select id="prioridade" name="prioridade" data-md-selectize>
+                        <option value="0">Selecione</option>
+                        <option value="1">Normal</option>
+                        <option value="2">Urgente</option>
+                    </select>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_title">Título</label>
+                    <input type="text" class="md-input" id="Task_title" name="titulo"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_title">Texto</label>
+                    <textarea name="texto" id="wysiwyg_ckeditor" cols="30" rows="20">
+                    </textarea>
+                </div>
+                <input type="hidden" name="idu" value="{{usuario[0].id}}" />
+                <div class="uk-modal-footer uk-text-right">
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Fechar</button><button type="submit" class="md-btn md-btn-flat md-btn-flat-primary" id="snippet_new_save">Adicionar Recado</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="uk-modal" id="recado">
+        <div id="corporecado" class="uk-modal-dialog uk-modal-dialog-large">
+            
+        </div>
+        
+    </div>
+     <script type="text/javascript">
+     function abrir(id){
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/buscarRecado.php",
+                data:{id: id},
+                success: function(data){
+                    if($("#mensagem").hasClass(id)){
+                    }else{
+                        $("#corporecado").html("");
+                        $("#corporecado").append(data);
+                    }
+                }       
+        });
+     }
+     function abrir1(id){
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/buscarRecadoEnviado.php",
+                data:{id: id},
+                success: function(data){
+                    if($("#mensagem").hasClass(id)){
+                    }else{
+                        $("#corporecado").html("");
+                        $("#corporecado").append(data);
+                    }
+                }       
+        });
+     }
+     function concluir(id){
+                $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/concluirRecado.php",
+                data:{id: id},
+                success: function(data){
+                    if(data>0){
+                        location.reload(); 
+                    }else{
+                        alert("Erro ao atualizar!");
+                    }
+                }       
+    });
+    }
+    $("form").submit(function(e){
+        e.preventDefault();
+        var usuario = $("select[name=usuarios]").val();
+        var empresa = $("select[name=empresas]").val();
+        var prioridade = $("select[name=prioridade]").val();
+        var titulo = $("input[name=titulo]").val();
+        var texto = $("textarea[name=texto]").val();
+        var idu = $("input[name=idu]").val();
+         if(((empresa!=0)&&(usuario!=0))&&(prioridade!=0)){
+            $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/addRecado.php",
+                data:{usuario: usuario, empresa: empresa, prioridade: prioridade, titulo: titulo, texto: texto, idu: idu},
+                success: function(data){
+                    if(data>0){
+                        location.reload(); 
+                    }else{
+                        alert("Erro ao cadastrar!");
+                    }
+                }       
+             });
+         }else{
+            alert("Por favor, preencha os campos!");
+         }          
+    });
+    </script>
+{% include 'footer.html'  %}
+    <script src="{{urlBase}}{{Css}}bower_components/tablesorter/dist/js/jquery.tablesorter.min.js"></script>
+    <script src="{{urlBase}}{{Css}}bower_components/tablesorter/dist/js/jquery.tablesorter.widgets.min.js"></script>
+    <script src="{{urlBase}}{{Css}}bower_components/tablesorter/dist/js/widgets/widget-alignChar.min.js"></script>
+    <script src="{{urlBase}}{{Css}}bower_components/tablesorter/dist/js/extras/jquery.tablesorter.pager.min.js"></script>
+    <script src="{{urlBase}}{{Css}}assets/js/pages/pages_issues.min.js"></script>
+    <script src="{{urlBase}}{{Css}}assets/js/pages/forms_wysiwyg.min.js"></script>
+    <script src="{{urlBase}}{{Css}}bower_components/ckeditor/ckeditor.js"></script>
+    <script src="{{urlBase}}{{Css}}bower_components/ckeditor/adapters/jquery.js"></script>
+    
+
+
+
+

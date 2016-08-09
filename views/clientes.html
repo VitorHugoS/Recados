@@ -1,0 +1,250 @@
+{% include 'headeradm.html'  %}
+<style type="text/css">
+    .selectize-dropdown{
+        z-index: 9999;
+    }
+</style>
+<div id="page_content">
+        <div id="page_content_inner">
+
+            <h3 class="heading_b uk-margin-bottom">Contato</h3>
+            <div class="md-card uk-margin-medium-bottom">
+                <div class="md-card-content">
+                    <div class="uk-grid" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <label for="contact_list_search">Procurar</label>
+                            <input class="md-input" type="text" id="contact_list_search"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-grid-width-xlarge-1-5 hierarchical_show" id="contact_list">
+            {% for item in clientes %}
+            <div data-uk-filter="{{item.empresa}}, {{item.nome}}">
+                    <div class="md-card md-card-hover">
+                        <div class="md-card-head">
+                            <div class="md-card-head-menu" data-uk-dropdown="{pos:'bottom-right'}">
+                                <i class="md-icon material-icons">&#xE5D4;</i>
+                                <div class="uk-dropdown uk-dropdown-small">
+                                    <ul class="uk-nav">
+                                        <li><a href="#" onclick="editar('{{item.id}}')">Editar</a></li>
+                                        <li><a href="#" onclick="excluir('{{item.id}}')">Remover</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="uk-text-center">
+                                <img class="md-card-head-avatar" src="{{baseUrl}}{{Css}}assets/img/avatars/avatar_02.png" alt=""/>
+                            </div>
+                            <h3 class="md-card-head-text uk-text-center">
+                                {{item.nome}}                             <span class="uk-text-truncate">{{item.nomeEmp}}   </span>
+                            </h3>
+                        </div>
+                        <div class="md-card-content">
+                             <ul class="md-list">
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Telefone</span>
+                                        <span class="uk-text-small uk-text-muted">{{item.telefone}}</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Celular</span>
+                                        <span class="uk-text-small uk-text-muted">{{item.celular}}</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="md-list-content">
+                                        <span class="md-list-heading">Email</span>
+                                        <span class="uk-text-small uk-text-muted uk-text-truncate">{{item.email}}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        <div class="md-fab-wrapper">
+        <a class="md-fab md-fab-accent" href="#novo_cliente" data-uk-modal="{ center:true }">
+            <i class="material-icons">&#xE145;</i>
+        </a>
+        </div>
+        <div class="uk-modal" id="novo_cliente">
+        <div class="uk-modal-dialog">
+            <form id="add" class="uk-form-stacked">
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Empresa</label>
+                    <select id="empresas" name="empresas" data-md-selectize>
+                        <option value="0">Selecione</option>
+                        {% for item in empresa %}
+                             <option value="{{item.id}}">{{item.empresa}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_title">CPF</label>
+                    <input type="text" class="md-input masked_input" id="Task_title" name="cpf" data-inputmask="'mask': '999.999.999 - 99'" data-inputmask-showmaskonhover="false"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_title">Nome</label>
+                    <input type="text" class="md-input" id="Task_title" name="nome"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_senha">Telefone</label>
+                    <input class="md-input masked_input" id="masked_phone" type="text" data-inputmask="'mask': '99 - 9999 9999'" data-inputmask-showmaskonhover="false" name="tel"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Celular</label>
+                    <input class="md-input masked_input" id="masked_phone" type="text" data-inputmask="'mask': '99 - 99999 9999'" data-inputmask-showmaskonhover="false" name="cel"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Email</label>
+                    <input type="text" class="md-input" id="task_email" name="email"/>
+                </div>
+
+                <div class="uk-modal-footer uk-text-right">
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Fechar</button><button type="submit" class="md-btn md-btn-flat md-btn-flat-primary" id="snippet_new_save">Adicionar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+     <div class="uk-modal" id="attclient">
+        <div class="uk-modal-dialog">
+            <form id="att" class="uk-form-stacked">
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Empresa</label>
+                    <select id="empresas" name="empresast" data-md-selectize>
+                        <option value="0" selected="">Selecione</option>
+                        {% for item in empresa %}
+                             <option value="{{item.id}}">{{item.empresa}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="hidden" name="idt"/>
+                 <div class="uk-margin-medium-bottom">
+                    <label for="task_title">CPF</label>
+                    <input type="text" class="md-input masked_input" id="Task_title" name="cpfedit" data-inputmask="'mask': '999.999.999 - 99'" data-inputmask-showmaskonhover="false" value="0" />
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_title">Nome</label>
+                    <input type="text" class="md-input" id="Task_title" name="nomet" value="0" />
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_senha">Telefone</label>
+                    <input class="md-input masked_input" id="masked_phone" type="text" data-inputmask="'mask': '99 - 9999 9999'" data-inputmask-showmaskonhover="false" name="telt" value="0"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Celular</label>
+                    <input class="md-input masked_input" id="masked_phone" type="text" data-inputmask="'mask': '99 - 99999 9999'" data-inputmask-showmaskonhover="false" name="celt" value="0"/>
+                </div>
+                <div class="uk-margin-medium-bottom">
+                    <label for="task_email">Email</label>
+                    <input type="text" class="md-input" id="task_email" name="emailt" value="0"/>
+                </div>
+
+                <div class="uk-modal-footer uk-text-right">
+                    <button type="button" class="md-btn md-btn-flat uk-modal-close">Fechar</button><button type="submit" class="md-btn md-btn-flat md-btn-flat-primary" id="snippet_new_save">Atualizar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript">
+    $("#add").submit(function(e){
+        e.preventDefault();
+        var empresa = $("select[name=empresas]").val();
+        var cpf = $("input[name=cpf]").val();
+        var nome = $("input[name=nome]").val();
+        var tel = $("input[name=tel]").val();
+        var cel = $("input[name=cel]").val();
+        var email = $("input[name=email]").val();
+        
+        if(empresa!=0){
+            $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/addClientes.php",
+                data:{cpf: cpf, empresa: empresa, nome: nome, tel: tel, cel: cel, email: email, empresa: empresa},
+                success: function(data){
+                    if(data>0){
+                        location.reload(); 
+                    }else{
+                        alert("Erro ao cadastrar!");
+                    }
+                }       
+        });
+        }else{
+            alert("Por favor, selecione uma empresa");
+        }        
+    });
+    $("#att").submit(function(e){
+        e.preventDefault();
+        var nomet = $("input[name=nomet]").val();
+        var idt = $("input[name=idt]").val();
+        var telt = $("input[name=telt]").val();
+        var celt = $("input[name=celt]").val();
+        var emailt = $("input[name=emailt]").val();
+        var empresa = $("select[name=empresast]").val();
+        var cpf = $("input[name=cpfedit]").val();
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/attCliente.php",
+                data:{nomet: nomet, idt: idt, telt: telt, celt: celt, emailt: emailt,empresa: empresa, cpf: cpf},
+                success: function(data){
+                    if(data>0){
+                    location.reload(); 
+                    }else{
+                    alert("Erro ao atualizar!");
+                    }
+                }       
+        });
+    });
+    function excluir(id){
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/delCliente.php",
+                data:{id: id},
+                success: function(data){
+                    if(data>0){
+                    location.reload(); 
+                    }else{
+                    alert("Erro ao apagar!");
+                    }
+                }       
+        });
+    }
+    function editar(value){
+        var modal = UIkit.modal("#attclient");
+        if ( modal.isActive() ) {
+            modal.hide();
+        } else {
+            modal.show();
+        }
+        $.ajax({
+                type: "POST",
+                url: "{{urlBase}}controller/actions/editCliente.php",
+                data:{id: value},
+                success: function(data){
+                    var jsonData = JSON.parse(data);
+                    $("input[name=idt]").val(jsonData[0].id);
+                    $("input[name=nomet]").val(jsonData[0].nome);
+                    $("input[name=telt]").val(jsonData[0].telefone);
+                    $("input[name=cpfedit]").val(jsonData[0].cpf);
+                    $("input[name=emailt]").val(jsonData[0].email);
+                    $("input[name=celt]").val(jsonData[0].celular);
+                }       
+        });
+    }
+    </script>
+    {% include 'footer.html'  %}
+     <!--  contact list functions -->
+    <script src="{{baseUrl}}{{Css}}assets/js/pages/page_contact_list.min.js"></script>
+    <!--  forms advanced functions -->
+    <script src="{{urlBase}}{{Css}}assets/js/pages/forms_advanced.min.js"></script>
+        <!-- ionrangeslider -->
+    <script src="{{urlBase}}{{Css}}bower_components/ion.rangeslider/js/ion.rangeSlider.min.js"></script>
+    <!-- htmleditor (codeMirror) -->
+    <script src="{{urlBase}}{{Css}}assets/js/uikit_htmleditor_custom.min.js"></script>
+    <!-- inputmask-->
+    <script src="{{urlBase}}{{Css}}bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
